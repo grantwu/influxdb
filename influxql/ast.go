@@ -594,6 +594,11 @@ func (s *DropRetentionPolicyStatement) RequiredPrivileges() (ExecutionPrivileges
 	return ExecutionPrivileges{{Admin: false, Name: s.Database, Privilege: WritePrivilege}}, nil
 }
 
+// DefaultDatabase returns the default database from the statement.
+func (s *DropRetentionPolicyStatement) DefaultDatabase() string {
+	return s.Database
+}
+
 // CreateUserStatement represents a command for creating a new user.
 type CreateUserStatement struct {
 	// Name of the user to be created.
@@ -704,6 +709,11 @@ func (s *GrantStatement) RequiredPrivileges() (ExecutionPrivileges, error) {
 	return ExecutionPrivileges{{Admin: true, Name: "", Privilege: AllPrivileges}}, nil
 }
 
+// DefaultDatabase returns the default database from the statement.
+func (s *GrantStatement) DefaultDatabase() string {
+	return s.On
+}
+
 // GrantAdminStatement represents a command for granting admin privilege.
 type GrantAdminStatement struct {
 	// Who to grant the privilege to.
@@ -802,6 +812,11 @@ func (s *RevokeStatement) RequiredPrivileges() (ExecutionPrivileges, error) {
 	return ExecutionPrivileges{{Admin: true, Name: "", Privilege: AllPrivileges}}, nil
 }
 
+// DefaultDatabase returns the default database from the statement.
+func (s *RevokeStatement) DefaultDatabase() string {
+	return s.On
+}
+
 // RevokeAdminStatement represents a command to revoke admin privilege from a user.
 type RevokeAdminStatement struct {
 	// Who to revoke admin privilege from.
@@ -868,6 +883,11 @@ func (s *CreateRetentionPolicyStatement) RequiredPrivileges() (ExecutionPrivileg
 	return ExecutionPrivileges{{Admin: true, Name: "", Privilege: AllPrivileges}}, nil
 }
 
+// DefaultDatabase returns the default database from the statement.
+func (s *CreateRetentionPolicyStatement) DefaultDatabase() string {
+	return s.Database
+}
+
 // AlterRetentionPolicyStatement represents a command to alter an existing retention policy.
 type AlterRetentionPolicyStatement struct {
 	// Name of policy to alter.
@@ -922,6 +942,11 @@ func (s *AlterRetentionPolicyStatement) String() string {
 // RequiredPrivileges returns the privilege required to execute an AlterRetentionPolicyStatement.
 func (s *AlterRetentionPolicyStatement) RequiredPrivileges() (ExecutionPrivileges, error) {
 	return ExecutionPrivileges{{Admin: true, Name: "", Privilege: AllPrivileges}}, nil
+}
+
+// DefaultDatabase returns the default database from the statement.
+func (s *AlterRetentionPolicyStatement) DefaultDatabase() string {
+	return s.Database
 }
 
 // FillOption represents different options for filling aggregate windows.
@@ -2558,6 +2583,14 @@ func (s *DeleteStatement) RequiredPrivileges() (ExecutionPrivileges, error) {
 	return ExecutionPrivileges{{Admin: false, Name: "", Privilege: WritePrivilege}}, nil
 }
 
+// DefaultDatabase returns the default database from the statement.
+func (s *DeleteStatement) DefaultDatabase() string {
+	if m, ok := s.Source.(*Measurement); ok {
+		return m.Database
+	}
+	return ""
+}
+
 // ShowSeriesStatement represents a command for listing series in the database.
 type ShowSeriesStatement struct {
 	// Database to query. If blank, use the default database.
@@ -2842,6 +2875,11 @@ func (s *DropContinuousQueryStatement) RequiredPrivileges() (ExecutionPrivileges
 	return ExecutionPrivileges{{Admin: false, Name: "", Privilege: WritePrivilege}}, nil
 }
 
+// DefaultDatabase returns the default database from the statement.
+func (s *DropContinuousQueryStatement) DefaultDatabase() string {
+	return s.Database
+}
+
 // ShowMeasurementsStatement represents a command for listing measurements.
 type ShowMeasurementsStatement struct {
 	// Database to query. If blank, use the default database.
@@ -2904,6 +2942,11 @@ func (s *ShowMeasurementsStatement) String() string {
 // RequiredPrivileges returns the privilege(s) required to execute a ShowMeasurementsStatement.
 func (s *ShowMeasurementsStatement) RequiredPrivileges() (ExecutionPrivileges, error) {
 	return ExecutionPrivileges{{Admin: false, Name: "", Privilege: ReadPrivilege}}, nil
+}
+
+// DefaultDatabase returns the default database from the statement.
+func (s *ShowMeasurementsStatement) DefaultDatabase() string {
+	return s.Database
 }
 
 // DropMeasurementStatement represents a command to drop a measurement.
@@ -3061,6 +3104,11 @@ func (s *CreateSubscriptionStatement) RequiredPrivileges() (ExecutionPrivileges,
 	return ExecutionPrivileges{{Admin: true, Name: "", Privilege: AllPrivileges}}, nil
 }
 
+// DefaultDatabase returns the default database from the statement.
+func (s *CreateSubscriptionStatement) DefaultDatabase() string {
+	return s.Database
+}
+
 // DropSubscriptionStatement represents a command to drop a subscription to the incoming data stream.
 type DropSubscriptionStatement struct {
 	Name            string
@@ -3076,6 +3124,11 @@ func (s *DropSubscriptionStatement) String() string {
 // RequiredPrivileges returns the privilege required to execute a DropSubscriptionStatement
 func (s *DropSubscriptionStatement) RequiredPrivileges() (ExecutionPrivileges, error) {
 	return ExecutionPrivileges{{Admin: true, Name: "", Privilege: AllPrivileges}}, nil
+}
+
+// DefaultDatabase returns the default database from the statement.
+func (s *DropSubscriptionStatement) DefaultDatabase() string {
+	return s.Database
 }
 
 // ShowSubscriptionsStatement represents a command to show a list of subscriptions.
@@ -3303,6 +3356,11 @@ func (s *ShowFieldKeysStatement) String() string {
 // RequiredPrivileges returns the privilege(s) required to execute a ShowFieldKeysStatement.
 func (s *ShowFieldKeysStatement) RequiredPrivileges() (ExecutionPrivileges, error) {
 	return ExecutionPrivileges{{Admin: false, Name: "", Privilege: ReadPrivilege}}, nil
+}
+
+// DefaultDatabase returns the default database from the statement.
+func (s *ShowFieldKeysStatement) DefaultDatabase() string {
+	return s.Database
 }
 
 // Fields represents a list of fields.
