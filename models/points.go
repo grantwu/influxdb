@@ -554,6 +554,9 @@ func scanTags(buf []byte, i int, indices []int) (int, int, []int, error) {
 		case tagValueState:
 			state, i, err = scanTagsValue(buf, i)
 		case fieldsState:
+			if commas >= len(indices) {
+				return i, commas, indices, fmt.Errorf("invalid input")
+			}
 			indices[commas] = i + 1
 			return i, commas, indices, nil
 		}
